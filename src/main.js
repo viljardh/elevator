@@ -1,13 +1,3 @@
-class Person {
-    constructor(currentFloor, destinationFloor) {
-        this.id = Math.random().toString(36).substr(2, 9);
-        this.currentFloor = currentFloor;
-        this.destinationFloor = destinationFloor;
-        this.direction = destinationFloor > currentFloor ? 'up' : 'down';
-        this.inElevator = false;
-    }
-}
-
 class ElevatorSimulator {
     constructor() {
         this.currentFloor = 1;
