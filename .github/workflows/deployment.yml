@@ -12,9 +12,9 @@ jobs:
     - uses: actions/checkout@v4
 
     - name: Deploy to netlify
-      uses: netlify/actions/cli@master
+      run: |
+        npm install netlify-cli@23.7.3
+        netlify deploy --dir=./src/ --prod
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      with:
-        args: deploy --dir=src --prod
