@@ -2,6 +2,7 @@
 
 class ElevatorSimulator {
     constructor() {
+        
         this.personIdCounter = 0;
         this.currentFloor = 1;
         this.isMoving = false;

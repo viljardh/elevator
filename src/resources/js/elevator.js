@@ -20,13 +20,6 @@ class Elevator {
         this.destination.add(passDesto)
     }
 
-    checkIfFull() {
-        for (let i = 0; i < this.passengers.length(); i++) {
-            if (i == this.capacity - 1 ) {
-                return true
-            }
-        }
-    }
 
     addPassenger(passenger) {
         if (!checkfIfFull()) {
@@ -34,8 +27,13 @@ class Elevator {
         } 
     }
 
-    removePassenger(floor) {
-        
+
+    notifyPassengers() {
+        this.passengers.forEach( passenger => {
+            if (passenger.destFloor() == this.currentFloor) {
+
+            }
+        })
     }
     
 };
