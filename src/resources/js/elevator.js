@@ -14,26 +14,19 @@ class Elevator {
         `;
 
     }
+    currentFloor() {
+        return currentFloor
+    }
 
     call(floor, direction) {
         const passDesto = new passengerDesto(floor, direction)
         this.destination.add(passDesto)
     }
 
-
     addPassenger(passenger) {
         if (!checkfIfFull()) {
             this.passengers.add(passenger)
         } 
-    }
-
-
-    notifyPassengers() {
-        this.passengers.forEach( passenger => {
-            if (passenger.destFloor() == this.currentFloor) {
-
-            }
-        })
     }
     
 };

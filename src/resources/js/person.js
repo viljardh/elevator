@@ -30,8 +30,11 @@ class Person {
         }
     }
 
+    checkFloor(elevator) {
+        return elevator.currentFloor()
+    }
+
     leaveElevator(elevator) {
-        
     }
 
     
