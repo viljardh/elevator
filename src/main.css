@@ -1,0 +1,251 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.building {
+    background-color: #ddd;
+    border: 3px solid #999;
+    width: 300px;
+    height: 600px;
+    position: relative;
+    border-radius: 10px;
+}
+
+.floor {
+    height: 60px;
+    border-bottom: 2px solid #999;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    box-sizing: border-box;
+    background-color: #f8f8f8;
+    position: relative;
+}
+
+.floor:last-child {
+    border-bottom: none;
+}
+
+.floor-number {
+    font-weight: bold;
+    font-size: 14px;
+    min-width: 20px;
+}
+
+.people-waiting {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+    max-width: 150px;
+    font-size: 12px;
+}
+
+.person {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    position: relative;
+}
+
+.person-up {
+    background-color: #2196F3;
+}
+
+.person-down {
+    background-color: #FF5722;
+}
+
+.person-tooltip {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.person:hover .person-tooltip {
+    opacity: 1;
+}
+
+.elevator {
+    position: absolute;
+    width: 80px;
+    height: 50px;
+    background-color: #4CAF50;
+    border: 2px solid #45a049;
+    border-radius: 5px;
+    right: 10px;
+    transition: bottom 2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    flex-direction: column;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.elevator-people {
+    display: flex;
+    gap: 2px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-height: 30px;
+    overflow: hidden;
+}
+
+.elevator-person {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #FFD700;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-weight: bold;
+}
+
+.controls {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-width: 300px;
+}
+
+.control-section {
+    margin-bottom: 20px;
+}
+
+.control-panel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.floor-button {
+    padding: 15px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.floor-button:hover {
+    background-color: #1976D2;
+}
+
+.floor-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.floor-button.active {
+    background-color: #FF9800;
+}
+
+.people-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.people-button {
+    padding: 10px;
+    background-color: #9C27B0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.people-button:hover {
+    background-color: #7B1FA2;
+}
+
+.status {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.status h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.status-item {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.moving {
+    background-color: #FF5722 !important;
+}
+
+.legend {
+    background-color: #e8f5e8;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 3px 0;
+}
+
+.legend-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
