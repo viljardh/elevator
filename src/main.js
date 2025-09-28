@@ -1,3 +1,5 @@
+
+
 class ElevatorSimulator {
     constructor() {
         this.currentFloor = 1;
@@ -97,15 +99,22 @@ class ElevatorSimulator {
     }
 
     clearAllPeople() {
+        console.log('Clearing all people - before:', this.people.length, this.elevatorPeople.length);
         this.people = [];
         this.elevatorPeople = [];
+        this.queue.clear();
+        console.log('Clearing all people - after:', this.people.length, this.elevatorPeople.length);
         this.renderPeople();
         this.updateDisplay();
     }
 
     renderPeople() {
+        console.log('Rendering people - people array length:', this.people.length, 'elevator people length:', this.elevatorPeople.length);
+        
         // Clear all people displays
-        document.querySelectorAll('.people-waiting').forEach(div => {
+        const peopleWaitingDivs = document.querySelectorAll('.people-waiting');
+        console.log('Found people-waiting divs:', peopleWaitingDivs.length);
+        peopleWaitingDivs.forEach(div => {
             div.innerHTML = '';
         });
 
@@ -113,24 +122,29 @@ class ElevatorSimulator {
         this.people.forEach(person => {
             if (!person.inElevator) {
                 const floorDiv = document.querySelector(`[data-floor="${person.currentFloor}"]`);
-                const personDiv = document.createElement('div');
-                personDiv.className = `person ${person.direction === 'up' ? 'person-up' : 'person-down'}`;
-                personDiv.textContent = person.destinationFloor;
-                personDiv.innerHTML += `<div class="person-tooltip">Going to Floor ${person.destinationFloor}</div>`;
-                floorDiv.appendChild(personDiv);
+                if (floorDiv) {
+                    const personDiv = document.createElement('div');
+                    personDiv.className = `person ${person.direction === 'up' ? 'person-up' : 'person-down'}`;
+                    personDiv.textContent = person.destinationFloor;
+                    personDiv.innerHTML += `<div class="person-tooltip">Going to Floor ${person.destinationFloor}</div>`;
+                    floorDiv.appendChild(personDiv);
+                }
             }
         });
 
         // Render people in elevator
         const elevatorPeopleDiv = document.getElementById('elevatorPeople');
-        elevatorPeopleDiv.innerHTML = '';
-        this.elevatorPeople.forEach(person => {
-            const personDiv = document.createElement('div');
-            personDiv.className = 'elevator-person';
-            personDiv.textContent = person.destinationFloor;
-            personDiv.title = `Going to Floor ${person.destinationFloor}`;
-            elevatorPeopleDiv.appendChild(personDiv);
-        });
+        console.log('Elevator people div found:', !!elevatorPeopleDiv);
+        if (elevatorPeopleDiv) {
+            elevatorPeopleDiv.innerHTML = '';
+            this.elevatorPeople.forEach(person => {
+                const personDiv = document.createElement('div');
+                personDiv.className = 'elevator-person';
+                personDiv.textContent = person.destinationFloor;
+                personDiv.title = `Going to Floor ${person.destinationFloor}`;
+                elevatorPeopleDiv.appendChild(personDiv);
+            });
+        }
     }
 
     callElevator(targetFloor) {
