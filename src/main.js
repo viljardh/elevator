@@ -2,6 +2,7 @@
 
 class ElevatorSimulator {
     constructor() {
+        this.personIdCounter = 0;
         this.currentFloor = 1;
         this.isMoving = false;
         this.queue = new Set();
@@ -73,7 +74,8 @@ class ElevatorSimulator {
             return;
         }
 
-        const person = new Person(fromFloor, toFloor);
+        const person = new Person(personIdCounter, fromFloor, toFloor);
+        personIdCounter++;
         this.people.push(person);
         this.renderPeople();
         this.updateDisplay();

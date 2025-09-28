@@ -21,12 +21,16 @@ class Elevator {
     }
 
     checkIfFull() {
-        let c = 0;
         for (let i = 0; i < this.passengers.length(); i++) {
+            if (i == this.capacity - 1 ) {
+                return true
+            }
         }
     }
     addPassenger(passenger) {
-        this.passengers.add(passenger)
+        if (!checkfIfFull()) {
+            this.passengers.add(passenger)
+        } 
     }
     
 };
