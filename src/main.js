@@ -74,8 +74,8 @@ class ElevatorSimulator {
             return;
         }
 
-        const person = new Person(personIdCounter, fromFloor, toFloor);
-        personIdCounter++;
+        const person = new Person(this.personIdCounter, fromFloor, toFloor);
+        this.personIdCounter++;
         this.people.push(person);
         this.renderPeople();
         this.updateDisplay();

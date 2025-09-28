@@ -27,10 +27,15 @@ class Elevator {
             }
         }
     }
+
     addPassenger(passenger) {
         if (!checkfIfFull()) {
             this.passengers.add(passenger)
         } 
+    }
+
+    removePassenger(floor) {
+        
     }
     
 };
