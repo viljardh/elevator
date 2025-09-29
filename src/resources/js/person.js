@@ -1,6 +1,6 @@
 class Person {
-    constructor(id, currentFloor, destinationFloor) {
-        this.id = id;
+    constructor(currentFloor, destinationFloor) {
+        this.id = Math.random().toString(36).substr(2, 9);
         console.log(this.id)
         this.currentFloor = currentFloor;
         this.destinationFloor = destinationFloor;
@@ -12,30 +12,20 @@ class Person {
         return this.destinationFloor
     }
 
-    id() {
-        return this.id
+    getId() {
+        return this.id;
     }
 
-    checkIfFull(elevator) {
-        for (let i = 0; i < elevator.passengers.length(); i++) {
-            if (i == this.capacity - 1 ) {
-                return true
-            }
-        }
+    getDestinationFloor() {
+        return this.destinationFloor;
     }
 
-    enterElevator(elevator, floor) {
-        if (!checkIfFull(elevator)) {
-            this.inElevator = true 
-            elevator.addPassenger(this)
-        }
+    enterElevator() {
+        this.inElevator = true;
     }
 
-    checkFloor(elevator) {
-        return elevator.currentFloor()
-    }
-
-    leaveElevator(elevator) {
+    leaveElevator() {
+        this.inElevator = false;
     }
 
     
