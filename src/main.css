@@ -249,3 +249,9 @@ h1 {
     color: #333;
     margin-bottom: 30px;
 }
+
+h2 {
+    text-align: center;
+    color: #595959;
+    margin-bottom: 15px;
+}
