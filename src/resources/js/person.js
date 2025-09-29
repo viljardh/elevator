@@ -24,8 +24,9 @@ class Person {
         }
     }
 
-    enterElevator(elevator) {
+    enterElevator(elevator, floor) {
         if (!checkIfFull(elevator)) {
+            this.inElevator = true 
             elevator.addPassenger(this)
         }
     }
