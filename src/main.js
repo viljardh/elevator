@@ -9,6 +9,7 @@ class ElevatorSimulator {
         this.initializeControls();
         this.elevator.updateElevatorPosition();
         this.elevator.updateDisplay();
+        this.globalPeopleIdCounter = 0;
     }
 
     initializeBuilding() {
@@ -53,7 +54,8 @@ class ElevatorSimulator {
             return;
         }
 
-        const person = new Person(fromFloor, toFloor);
+        const person = new Person(this.globalPeopleIdCounter, fromFloor, toFloor);
+        this.globalPeopleIdCounter ++;
         this.elevator.addPerson(person);
         this.renderPeople();
         this.elevator.updateDisplay();

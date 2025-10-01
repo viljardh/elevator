@@ -1,6 +1,6 @@
 class Person {
-    constructor(currentFloor, destinationFloor) {
-        this.id = Math.random().toString(36).substr(2, 9);
+    constructor(id, currentFloor, destinationFloor) {
+        this.id = id;
         console.log(this.id)
         this.currentFloor = currentFloor;
         this.destinationFloor = destinationFloor;
