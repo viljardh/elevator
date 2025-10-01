@@ -98,6 +98,9 @@ class ElevatorSimulator {
         this.elevator.updateDisplay();
     }
 
+    // Helper function to search and return a floor
+    // I could avoid this with clever use of indexing
+    // but I'm not going to do that. 
     findFloor(no) {
         for (const floor of this.floors) {
             console.log(no, floor.getFloorNumber);
@@ -106,6 +109,8 @@ class ElevatorSimulator {
             }
         }
     }
+
+    // Not looking forward to this
     renderPeople() {
         console.log('=== RENDER PEOPLE START ===');
         console.log('Rendering people - people array length:', this.elevator.peopleQueue.length, 'elevator people length:', this.elevator.elevatorPeople.length);
