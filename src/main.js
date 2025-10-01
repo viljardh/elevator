@@ -16,6 +16,7 @@ class ElevatorSimulator {
         building.innerHTML = '';
 
         // Create floors (10 to 1 from top to bottom) using Floor class
+        // better on divs to do reverse order
         for (let floorNum = 10; floorNum >= 1; floorNum--) {
             const floor = new Floor(floorNum);
             const floorDiv = floor.createElement();
