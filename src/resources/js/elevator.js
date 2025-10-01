@@ -2,8 +2,8 @@ class Elevator {
     constructor(maxCapacity = 8) {
         this.currentFloor = 1;
         this.isMoving = false;
-        this.queue = new Set();
-        this.people = [];
+        this.floorQueue = new Set();
+        this.peopleQueue = [];
         this.elevatorPeople = [];
         this.maxCapacity = maxCapacity;
         this.elevator = null;
@@ -46,13 +46,13 @@ class Elevator {
         document.getElementById('currentFloor').textContent = this.currentFloor;
         document.getElementById('elevatorStatus').textContent = this.isMoving ? 'Moving' : 'Idle';
         document.getElementById('elevatorCapacity').textContent = `${this.elevatorPeople.length}/${this.maxCapacity}`;
-        document.getElementById('totalPeople').textContent = this.people.length;
+        document.getElementById('totalPeople').textContent = this.peopleQueue.length;
         document.getElementById('floorQueue').textContent = 
-            this.queue.size > 0 ? Array.from(this.queue).sort((a,b) => a-b).join(', ') : 'Empty';
+            this.floorQueue.size > 0 ? Array.from(this.floorQueue).sort((a,b) => a-b).join(', ') : 'Empty';
     }
 
     callElevator(targetFloor) {
-        this.queue.add(targetFloor);
+        this.floorQueue.add(targetFloor);
         this.updateDisplay();
         
         if (!this.isMoving) {
@@ -61,10 +61,10 @@ class Elevator {
     }
 
     async processQueue() {
-        while (this.queue.size > 0 || this.elevatorPeople.length > 0) {
+        while (this.floorQueue.size > 0 || this.elevatorPeople.length > 0) {
             let nextFloor = this.findNextFloor();
             if (nextFloor !== null) {
-                this.queue.delete(nextFloor);
+                this.floorQueue.delete(nextFloor);
                 await this.moveToFloor(nextFloor);
                 await this.handlePeopleAtFloor(nextFloor);
             } else {
@@ -82,12 +82,12 @@ class Elevator {
         }
 
         // Find closest floor in queue
-        if (this.queue.size === 0) return null;
+        if (this.floorQueue.size === 0) return null;
         
         let closest = null;
         let minDistance = Infinity;
         
-        for (let floor of this.queue) {
+        for (let floor of this.floorQueue) {
             let distance = Math.abs(floor - this.currentFloor);
             if (distance < minDistance) {
                 minDistance = distance;
@@ -121,7 +121,7 @@ class Elevator {
 
     async handlePeopleAtFloor(floor) {
         console.log(`Handling people at floor ${floor}`);
-        console.log(`Before: people waiting: ${this.people.length}, people in elevator: ${this.elevatorPeople.length}`);
+        console.log(`Before: people waiting: ${this.peopleQueue.length}, people in elevator: ${this.elevatorPeople.length}`);
         
         // People getting off - remove them completely from the simulation
         const peopleGettingOff = this.elevatorPeople.filter(p => p.destinationFloor === floor);
@@ -133,8 +133,8 @@ class Elevator {
         let peopleBoarded = 0;
 
         // Filter people who are waiting at this floor and can board
-        const originalPeopleCount = this.people.length;
-        this.people = this.people.filter(person => {
+        const originalPeopleCount = this.peopleQueue.length;
+        this.peopleQueue = this.peopleQueue.filter(person => {
             if (person.currentFloor === floor && 
                 !person.inElevator && 
                 peopleBoarded < availableCapacity) {
@@ -143,7 +143,7 @@ class Elevator {
                 // Move person to elevator
                 person.enterElevator();
                 this.elevatorPeople.push(person);
-                this.queue.add(person.destinationFloor);
+                this.floorQueue.add(person.destinationFloor);
                 peopleBoarded++;
                 
                 // Remove from waiting people array
@@ -152,9 +152,9 @@ class Elevator {
             return true;
         });
         
-        console.log(`Filtered people array: ${originalPeopleCount} -> ${this.people.length} (removed ${originalPeopleCount - this.people.length})`);
+        console.log(`Filtered people array: ${originalPeopleCount} -> ${this.peopleQueue.length} (removed ${originalPeopleCount - this.peopleQueue.length})`);
 
-        console.log(`After: people waiting: ${this.people.length}, people in elevator: ${this.elevatorPeople.length}`);
+        console.log(`After: people waiting: ${this.peopleQueue.length}, people in elevator: ${this.elevatorPeople.length}`);
         console.log(`People boarded: ${peopleBoarded}`);
 
         // Door animation
@@ -195,13 +195,13 @@ class Elevator {
         });
     }
 
-    addPerson(person) {
-        this.people.push(person);
+    queuePerson(person) {
+        this.peopleQueue.push(person);
     }
 
     clearAllPeople() {
-        this.people = [];
+        this.peopleQueue = [];
         this.elevatorPeople = [];
-        this.queue.clear();
+        this.floorQueue.clear();
     }
 }

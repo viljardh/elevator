@@ -3,7 +3,6 @@
 class ElevatorSimulator {
     constructor() {
         this.floors = [];
-        
         this.initializeBuilding();
         this.elevator = new Elevator(); // Create elevator after building is set up
         this.initializeControls();
@@ -49,14 +48,25 @@ class ElevatorSimulator {
     }
 
     addPerson(fromFloor, toFloor) {
+        
         if (fromFloor === toFloor) {
             alert("From and To floors cannot be the same!");
             return;
         }
 
+        // Make new person
         const person = new Person(this.globalPeopleIdCounter, fromFloor, toFloor);
         this.globalPeopleIdCounter ++;
-        this.elevator.addPerson(person);
+        
+        // Add to floor
+        let floor = this.findFloor(fromFloor)
+        console.log(floor)
+        floor.addPerson(person)
+
+        // Add to elevator queue
+        this.elevator.queuePerson(person);
+
+        // Gotta fix this, want to render from floor, not elevator
         this.renderPeople();
         this.elevator.updateDisplay();
 
@@ -81,20 +91,28 @@ class ElevatorSimulator {
     }
 
     clearAllPeople() {
-        console.log('Clearing all people - before:', this.elevator.people.length, this.elevator.elevatorPeople.length);
+        console.log('Clearing all people - before:', this.elevator.peopleQueue.length, this.elevator.elevatorPeople.length);
         this.elevator.clearAllPeople();
-        console.log('Clearing all people - after:', this.elevator.people.length, this.elevator.elevatorPeople.length);
+        console.log('Clearing all people - after:', this.elevator.peopleQueue.length, this.elevator.elevatorPeople.length);
         this.renderPeople();
         this.elevator.updateDisplay();
     }
 
+    findFloor(no) {
+        for (const floor of this.floors) {
+            console.log(no, floor.getFloorNumber);
+            if (floor.getFloorNumber() == no) {
+                return floor;
+            }
+        }
+    }
     renderPeople() {
         console.log('=== RENDER PEOPLE START ===');
-        console.log('Rendering people - people array length:', this.elevator.people.length, 'elevator people length:', this.elevator.elevatorPeople.length);
+        console.log('Rendering people - people array length:', this.elevator.peopleQueue.length, 'elevator people length:', this.elevator.elevatorPeople.length);
         
         // Log details about people
         console.log('People waiting on floors:');
-        this.elevator.people.forEach((person, i) => {
+        this.elevator.peopleQueue.forEach((person, i) => {
             console.log(`  ${i}: Floor ${person.currentFloor} -> ${person.destinationFloor}, inElevator: ${person.inElevator}`);
         });
         
@@ -118,7 +136,7 @@ class ElevatorSimulator {
 
         // Render ONLY people who are waiting (not in elevator) on floors
         let peopleRenderedOnFloors = 0;
-        this.elevator.people.forEach(person => {
+        this.elevator.peopleQueue.forEach(person => {
             // Only render people who are NOT in the elevator
             if (!person.inElevator) {
                 const floorDiv = document.querySelector(`[data-floor="${person.currentFloor}"] .people-waiting`);
