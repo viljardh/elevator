@@ -8,6 +8,9 @@ Mostly (completely) written by copilot, needed something to upload so I could se
 - Fix elevator logic
 - De-vibe the code
 
+## Next step: 
+- Having the engine move people in logical order
+
 ## Why
 
 I thought it might be an interesting exercise to make sense of a completely AI-generated code and basically completely refactor it into something more manageable and palateable. 
