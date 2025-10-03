@@ -185,7 +185,7 @@ class ElevatorSimulator {
     }
 
     async processQueue() {
-        while (this.elevator.floorQueue.size > 0 || this.elevator.elevatorPeople.length > 0) {
+        while (this.elevator.floorQueue.size > 0 || this.elevatorPeople.length > 0) {
             let nextFloor = this.elevator.findNextFloor();
             if (nextFloor !== null) {
                 this.elevator.floorQueue.delete(nextFloor);
