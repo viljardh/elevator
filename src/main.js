@@ -2,51 +2,18 @@
 
 class ElevatorSimulator {
     constructor() {
-        this.floors = [];
-        this.initializeBuilding();
-        this.elevator = new Elevator(); // Create elevator after building is set up
-        this.initializeControls();
+        // Use the Building class to initialize the building and get components
+        this.building = new Building();
+        this.building.initializeBuilding();
+        this.building.initializeControls();
+        this.floors = this.building.floors;
+        this.elevator = this.building.getElevator();
         this.elevator.updateElevatorPosition();
         this.elevator.updateDisplay();
         this.globalPeopleIdCounter = 0;
     }
 
-    initializeBuilding() {
-        const building = document.querySelector('.building');
-        building.innerHTML = '';
 
-        // Create floors (10 to 1 from top to bottom) using Floor class
-        // better on divs to do reverse order
-        for (let floorNum = 10; floorNum >= 1; floorNum--) {
-            const floor = new Floor(floorNum);
-            const floorDiv = floor.createElement();
-            building.appendChild(floorDiv);
-            this.floors.push(floor);
-        }
-    }
-
-    initializeControls() {
-        const floorButtons = document.getElementById('floorButtons');
-        const fromFloor = document.getElementById('fromFloor');
-        const toFloor = document.getElementById('toFloor');
-
-        // Create floor buttons
-        for (let floor = 10; floor >= 1; floor--) {
-            const button = document.createElement('button');
-            button.className = 'floor-button';
-            button.textContent = `Floor ${floor}`;
-            button.onclick = () => this.elevator.callElevator(floor);
-            if (floor === 1) button.classList.add('active');
-            floorButtons.appendChild(button);
-        }
-
-        // Populate floor selectors
-        for (let floor = 1; floor <= 10; floor++) {
-            fromFloor.innerHTML += `<option value="${floor}">Floor ${floor}</option>`;
-            toFloor.innerHTML += `<option value="${floor}">Floor ${floor}</option>`;
-        }
-        toFloor.selectedIndex = 1; // Default to floor 2
-    }
 
     addPerson(fromFloor, toFloor) {
         
@@ -59,8 +26,8 @@ class ElevatorSimulator {
         const person = new Person(this.globalPeopleIdCounter, fromFloor, toFloor);
         this.globalPeopleIdCounter ++;
         
-        // Add to floor
-        let floor = this.findFloor(fromFloor)
+        // Add to floor using building's findFloor method
+        let floor = this.building.findFloor(fromFloor)
         console.log(floor)
         floor.addPerson(person)
 
@@ -97,18 +64,6 @@ class ElevatorSimulator {
         console.log('Clearing all people - after:', this.elevator.peopleQueue.length, this.elevator.elevatorPeople.length);
         this.renderPeople();
         this.elevator.updateDisplay();
-    }
-
-    // Helper function to search and return a floor
-    // I could avoid this with clever use of indexing
-    // but I'm not going to do that. 
-    findFloor(no) {
-        for (const floor of this.floors) {
-            console.log(no, floor.getFloorNumber);
-            if (floor.getFloorNumber() == no) {
-                return floor;
-            }
-        }
     }
 
     // Not looking forward to this
@@ -202,7 +157,7 @@ function clearAllPeople() {
 function addSpecificPerson() {
     const fromFloor = parseInt(document.getElementById('fromFloor').value);
     const toFloor = parseInt(document.getElementById('toFloor').value);
-    elevator.addPerson(fromFloor, toFloor);
+    elevator.queuePerson(new Person(fromFloor, toFloor));
 }
 
 // Keyboard controls
