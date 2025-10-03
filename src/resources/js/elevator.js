@@ -42,36 +42,6 @@ class Elevator {
         console.log(`Elevator positioned at floor ${this.currentFloor}, bottom: ${bottomPosition}px`);
     }
 
-    updateDisplay() {
-        document.getElementById('currentFloor').textContent = this.currentFloor;
-        document.getElementById('elevatorStatus').textContent = this.isMoving ? 'Moving' : 'Idle';
-        document.getElementById('elevatorCapacity').textContent = `${this.elevatorPeople.length}/${this.maxCapacity}`;
-        document.getElementById('totalPeople').textContent = this.peopleQueue.length;
-        document.getElementById('floorQueue').textContent = 
-            this.floorQueue.size > 0 ? Array.from(this.floorQueue).sort((a,b) => a-b).join(', ') : 'Empty';
-    }
-
-    callElevator(targetFloor) {
-        this.floorQueue.add(targetFloor);
-        this.updateDisplay();
-        
-        if (!this.isMoving) {
-            this.processQueue();
-        }
-    }
-
-    async processQueue() {
-        while (this.floorQueue.size > 0 || this.elevatorPeople.length > 0) {
-            let nextFloor = this.findNextFloor();
-            if (nextFloor !== null) {
-                this.floorQueue.delete(nextFloor);
-                await this.moveToFloor(nextFloor);
-                await this.handlePeopleAtFloor(nextFloor);
-            } else {
-                break;
-            }
-        }
-    }
 
     findNextFloor() {
         // Check if anyone in elevator needs to get off
@@ -98,26 +68,6 @@ class Elevator {
         return closest;
     }
 
-    async moveToFloor(targetFloor) {
-        if (this.currentFloor === targetFloor) return;
-
-        this.isMoving = true;
-        this.elevator.classList.add('moving');
-        this.updateButtonStates();
-        this.updateDisplay();
-
-        const travelTime = Math.abs(targetFloor - this.currentFloor) * 500;
-        
-        this.currentFloor = targetFloor;
-        this.updateElevatorPosition();
-
-        await new Promise(resolve => setTimeout(resolve, travelTime));
-
-        this.isMoving = false;
-        this.elevator.classList.remove('moving');
-        this.updateButtonStates();
-        this.updateDisplay();
-    }
 
     async handlePeopleAtFloor(floor) {
         console.log(`Handling people at floor ${floor}`);

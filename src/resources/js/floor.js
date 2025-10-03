@@ -11,9 +11,11 @@ class Floor {
 
     removePerson(person) {
         const index = this.waitingPeople.findIndex(p => p.id === person.id);
-        if (index > -1) {
+        if (index !== -1) {
             this.waitingPeople.splice(index, 1);
+            return true;
         }
+        return false;
     }
 
     getPeopleWaiting() {
@@ -28,6 +30,10 @@ class Floor {
         this.waitingPeople = [];
     }
 
+    totalPeopleWaiting() {
+        return this.waitingPeople.length
+    }
+
     createElement() {
         const floorDiv = document.createElement('div');
         floorDiv.className = 'floor';
@@ -39,4 +45,6 @@ class Floor {
         this.element = floorDiv;
         return floorDiv;
     }
+
+
 }

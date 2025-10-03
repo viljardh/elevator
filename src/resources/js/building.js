@@ -63,4 +63,13 @@ class Building {
             }
         }
     }
+
+    totalPeopleWaiting() {
+        let totalPeople = 0
+        this.floors.forEach( floor =>  {
+            totalPeople += floor.totalPeopleWaiting()
+        })
+        return totalPeople
+    }
+      
 }
