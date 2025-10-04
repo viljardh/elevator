@@ -29,7 +29,7 @@ class ElevatorSimulator {
         floor.addPerson(person)
 
         // Add to elevator queue
-        this.elevator.queuePerson(person);
+        // this.elevator.queuePerson(person);
 
         // Gotta fix this, want to render from floor, not elevator
         this.renderPeople();
@@ -66,9 +66,7 @@ class ElevatorSimulator {
     }
 
     clearAllPeople() {
-        console.log('Clearing all people - before:', this.elevator.peopleQueue.length, this.elevator.elevatorPeople.length);
-        this.elevator.clearAllPeople();
-        console.log('Clearing all people - after:', this.elevator.peopleQueue.length, this.elevator.elevatorPeople.length);
+        this.building.clearAllPeople();
         this.renderPeople();
         this.updateDisplay();
     }
@@ -94,51 +92,29 @@ class ElevatorSimulator {
         this.updateDisplay();
     }
 
+
     async handlePeopleAtFloor(floor) {  
         // People getting off - remove them completely from the simulation
         const peopleGettingOff = this.elevator.elevatorPeople.filter(p => p.destinationFloor === floor);
         this.elevator.elevatorPeople = this.elevator.elevatorPeople.filter(p => p.destinationFloor !== floor);
         console.log(`People getting off: ${peopleGettingOff.length}`);
         
-        // People getting on - move them from waiting to elevator
-        const availableCapacity = this.elevator.maxCapacity - this.elevator.elevatorPeople.length;
-        let peopleBoarded = 0;
-
-        // Get the floor object to remove people from
+        // Get the floor object to handle people boarding
         const floorObj = this.building.findFloor(floor);
-
-        // Filter people who are waiting at this floor and can board
-        const originalPeopleCount = this.elevator.peopleQueue.length;
-        this.elevator.peopleQueue = this.elevator.peopleQueue.filter(person => {
-            if (person.currentFloor === floor && 
-                !person.inElevator && 
-                peopleBoarded < availableCapacity) {
-                
-                console.log(`Person boarding: from floor ${person.currentFloor} to floor ${person.destinationFloor}`);
-                // Move person to elevator
-                person.enterElevator();
-                this.elevator.elevatorPeople.push(person);
-                this.elevator.floorQueue.add(person.destinationFloor);
-                peopleBoarded++;
-                
-                // Remove person from floor waiting list
-                if (floorObj) {
-                    floorObj.removePerson(person);
-                }
-                
-                // Remove from waiting people array
-                return false;
-            }
-            return true;
-        });
+        let peopleBoarded = [];
         
-        console.log(`Filtered people array: ${originalPeopleCount} -> ${this.elevator.peopleQueue.length} (removed ${originalPeopleCount - this.elevator.peopleQueue.length})`);
+        if (floorObj) {
+            // Calculate available capacity
+            const availableCapacity = this.elevator.maxCapacity - this.elevator.elevatorPeople.length;
+            
+            // Let the floor handle transferring people to the elevator
+            peopleBoarded = floorObj.transferPeopleToElevator(this.elevator, availableCapacity);
+        }
 
-        console.log(`After: people waiting: ${this.elevator.peopleQueue.length}, people in elevator: ${this.elevator.elevatorPeople.length}`);
-        console.log(`People boarded: ${peopleBoarded}`);
+        console.log(`After boarding: people in elevator: ${this.elevator.elevatorPeople.length}, people boarded: ${peopleBoarded.length}`);
 
         // Door animation
-        if (peopleGettingOff.length > 0 || peopleBoarded > 0) {
+        if (peopleGettingOff.length > 0 || peopleBoarded.length > 0) {
             this.elevator.elevator.querySelector('div').textContent = '🔓';
             
             // Immediately call render to update display while doors are open
@@ -185,7 +161,7 @@ class ElevatorSimulator {
     }
 
     async processQueue() {
-        while (this.elevator.floorQueue.size > 0 || this.elevatorPeople.length > 0) {
+        while (this.elevator.floorQueue.size > 0) {
             let nextFloor = this.elevator.findNextFloor();
             if (nextFloor !== null) {
                 this.elevator.floorQueue.delete(nextFloor);
@@ -199,20 +175,6 @@ class ElevatorSimulator {
 
     // Not looking forward to this
     renderPeople() {
-        console.log('=== RENDER PEOPLE START ===');
-        console.log('Rendering people - people array length:', this.elevator.peopleQueue.length, 'elevator people length:', this.elevator.elevatorPeople.length);
-        
-        // Log details about people
-        console.log('People waiting on floors:');
-        this.elevator.peopleQueue.forEach((person, i) => {
-            console.log(`  ${i}: Floor ${person.currentFloor} -> ${person.destinationFloor}, inElevator: ${person.inElevator}`);
-        });
-        
-        console.log('People in elevator:');
-        this.elevator.elevatorPeople.forEach((person, i) => {
-            console.log(`  ${i}: Floor ${person.currentFloor} -> ${person.destinationFloor}, inElevator: ${person.inElevator}`);
-        });
-        
         // COMPLETELY clear all people displays first - both floors and elevator
         const peopleWaitingDivs = document.querySelectorAll('.people-waiting');
         console.log('Found people-waiting divs:', peopleWaitingDivs.length);
@@ -228,7 +190,11 @@ class ElevatorSimulator {
 
         // Render ONLY people who are waiting (not in elevator) on floors
         let peopleRenderedOnFloors = 0;
-        this.elevator.peopleQueue.forEach(person => {
+        const peopleList = this.building.getPeople()
+        peopleList.forEach(a => {
+            console.log(a)
+        })
+        this.building.getPeople().forEach(person => {
             // Only render people who are NOT in the elevator
             if (!person.inElevator) {
                 const floorDiv = document.querySelector(`[data-floor="${person.currentFloor}"] .people-waiting`);
@@ -288,7 +254,9 @@ function clearAllPeople() {
 function addSpecificPerson() {
     const fromFloor = parseInt(document.getElementById('fromFloor').value);
     const toFloor = parseInt(document.getElementById('toFloor').value);
-    elevator.queuePerson(new Person(fromFloor, toFloor));
+    const floor = this.building.findFloor(fromFloor)
+    console.out(floor.getFloorNumber())
+    floor.addPerson(new Person(fromFloor, toFloor));
 }
 
 // Keyboard controls

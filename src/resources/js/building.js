@@ -71,5 +71,19 @@ class Building {
         })
         return totalPeople
     }
+
+    getPeople() {
+        let people = [];
+        this.floors.forEach(floor => {
+            people = people.concat(floor.getPeople());
+        });
+        return people;
+    }
+
+    clearAllPeople() {
+        this.floors.forEach(floor => 
+            floor.clearAllPeople()
+        )
+    }
       
 }

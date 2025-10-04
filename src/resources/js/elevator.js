@@ -3,7 +3,6 @@ class Elevator {
         this.currentFloor = 1;
         this.isMoving = false;
         this.floorQueue = new Set();
-        this.peopleQueue = [];
         this.elevatorPeople = [];
         this.maxCapacity = maxCapacity;
         this.elevator = null;
@@ -68,12 +67,9 @@ class Elevator {
         return closest;
     }
 
-    queuePerson(person) {
-        this.peopleQueue.push(person);
-    }
+
 
     clearAllPeople() {
-        this.peopleQueue = [];
         this.elevatorPeople = [];
         this.floorQueue.clear();
     }

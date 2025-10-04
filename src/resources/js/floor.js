@@ -46,5 +46,36 @@ class Floor {
         return floorDiv;
     }
 
+    getPeople() {
+        return [...this.waitingPeople];
+    }
 
+
+
+    transferPeopleToElevator(elevator, maxPeopleToBoard) {
+       const peopleBoarded = [];
+       let boardedCount = 0;
+       
+       // Filter people who can board (not already in elevator and elevator has capacity)
+       this.waitingPeople = this.waitingPeople.filter(person => {
+           if (!person.inElevator && boardedCount < maxPeopleToBoard) {
+               console.log(`Person boarding from floor ${this.floorNumber}: going to floor ${person.destinationFloor}`);
+               
+               // Move person to elevator
+               person.enterElevator();
+               elevator.elevatorPeople.push(person);
+               elevator.floorQueue.add(person.destinationFloor);
+               
+               peopleBoarded.push(person);
+               boardedCount++;
+               
+               // Remove from this floor's waiting list
+               return false;
+           }
+           return true;
+       });
+       
+       console.log(`Floor ${this.floorNumber}: ${boardedCount} people boarded elevator`);
+       return peopleBoarded;
+    }
 }
