@@ -67,8 +67,6 @@ class Elevator {
         return closest;
     }
 
-
-
     clearAllPeople() {
         this.elevatorPeople = [];
         this.floorQueue.clear();
