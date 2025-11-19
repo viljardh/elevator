@@ -1,11 +1,11 @@
 # Simple vibecoded elevator simulator
 
-Initially written by copilot, needed something to upload so I could set up and experiment with pipeline. 
+Initially written by copilot, needed something to upload so I could set up and experiment with pipeline. Most of it has been rewritten and handled, but due to exams it's on hold. 
 
 https://elevator.hardersen.no
 
 ## Current todo: 
-- Split code into more sensible classes 
+- Split code into more sensible classes (mostly done) 
 - Squash bugs (mostly visual as of now)
 - Fix elevator logic
 
